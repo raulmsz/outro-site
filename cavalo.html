@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShrimpMaster | Premium Delivery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e67e22;
+            --secondary: #2c3e50;
+            --success: #25d366; /* WhatsApp Green */
+            --danger: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body { background-color: #f0f2f5; color: var(--dark); }
+
+        /* Header */
+        header {
+            background: var(--secondary);
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .cart-btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Grid de Produtos */
+        .container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .product-card:hover { transform: translateY(-5px); }
+
+        .product-img { width: 100%; height: 200px; object-fit: cover; }
+
+        .product-info { padding: 1.5rem; }
+
+        .price { color: var(--primary); font-size: 1.4rem; font-weight: 700; margin: 10px 0; }
+
+        .btn-add {
+            width: 100%;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-add:hover { background: var(--primary); }
+
+        /* MODAL DO CARRINHO (A TELA DE CARRINHO) */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none; /* Escondido por padrão */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .cart-content {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            background: var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .close-cart { font-size: 2rem; cursor: pointer; border: none; background: none; }
+
+        .cart-items-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-img { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; }
+
+        .cart-item-details { flex: 1; }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #eee;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .qty-btn { border: none; background: none; cursor: pointer; font-weight: bold; padding: 0 5px; }
+
+        .cart-footer {
+            padding: 2rem;
+            background: var(--light);
+            border-top: 1px solid #ddd;
+        }
+
+        .total-box {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-section { margin-bottom: 1.5rem; }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+        }
+
+        .btn-whatsapp {
+            width: 100%;
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Notificação */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            display: none;
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1 style="color: var(--primary);">🍤 ShrimpMaster</h1>
+        </div>
+        <button class="cart-btn" onclick="toggleCart(true)">
+            🛒 Ver Carrinho (<span id="cart-count">0</span>)
+        </button>
+    </header>
+
+    <div class="container">
+        <h2 style="margin-bottom: 2rem;">Cardápio de Hoje</h2>
+        <div class="products-grid" id="product-list"></div>
+    </div>
+
+    <!-- TELA DE CARRINHO (MODAL) -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Seu Carrinho</h2>
+                <button class="close-cart" onclick="toggleCart(false)">&times;</button>
+            </div>
+
+            <div class="cart-items-list" id="cart-items-list">
+                <!-- Itens via JS -->
+            </div>
+
+            <div class="cart-footer">
+                <div class="payment-section">
+                    <label><b>Forma de Pagamento:</b></label>
+                    <select id="payment-method">
+                        <option value="Pix">Pix (Liberado na hora)</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito (Link ou Maquininha)</option>
+                        <option value="Dinheiro">Dinheiro (Levar troco)</option>
+                    </select>
+                </div>
+
+                <div class="total-box">
+                    <span>Total a Pagar:</span>
+                    <span id="cart-total-value">R$ 0,00</span>
+                </div>
+
+                <button class="btn-whatsapp" onclick="sendToWhatsApp()">
+                    🚀 ENVIAR PEDIDO PARA WHATSAPP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">Adicionado ao carrinho!</div>
+
+    <script>
+        const products = [
+            { id: 1, name: "Camarão Rosa G (Limpo)", price: 98.50, img: "https://images.unsplash.com/photo-1559742811-822873691df0?w=400" },
+            { id: 2, name: "Camarão Pistola Gigante", price: 145.00, img: "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=400" },
+            { id: 3, name: "Camarão Cinza M", price: 55.90, img: "https://images.unsplash.com/photo-1590577976322-3d2d6e213065?w=400" },
+            { id: 4, name: "Camarão Empanado (500g)", price: 68.00, img: "https://images.unsplash.com/photo-1625943553852-781c6dd46faa?w=400" },
+            { id: 5, name: "Mix Paella Premium", price: 110.00, img: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=400" },
+            { id: 6, name: "Camarão com Casca G", price: 79.90, img: "https://images.unsplash.com/photo-1535400257038-5b0203e391b4?w=400" }
+        ];
+
+        let cart = [];
+
+        // Renderizar Produtos
+        function renderProducts() {
+            const container = document.getElementById('product-list');
+            container.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}" class="product-img">
+                    <div class="product-info">
+                        <h3>${p.name}</h3>
+                        <p class="price">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
+                        <button class="btn-add" onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Abrir/Fechar Carrinho
+        function toggleCart(show) {
+            document.getElementById('cart-modal').style.display = show ? 'flex' : 'none';
+            if(show) renderCartItems();
+        }
+
+        // Adicionar ao Carrinho
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const inCart = cart.find(item => item.id === id);
+
+            if (inCart) {
+                inCart.qty++;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            showToast();
+            updateBadge();
+        }
+
+        function updateBadge() {
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cart-count').innerText = count;
+        }
+
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 1500);
+        }
+
+        // Renderizar Itens na Tela de Carrinho
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-list');
+            const totalDisplay = document.getElementById('cart-total-value');
+            
+            if (cart.length === 0) {
+                container.innerHTML = "<p style='text-align:center; padding:20px;'>Seu carrinho está vazio.</p>";
+                totalDisplay.innerText = "R$ 0,00";
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                total += item.price * item.qty;
+                return `
+                    <div class="cart-item-row">
+                        <img src="${item.img}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <p>R$ ${item.price.toFixed(2)}</p>
+                        </div>
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="updateQty(${item.id}, -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn" onclick="updateQty(${item.id}, 1)">+</button>
+                        </div>
+                        <div style="font-weight:600; min-width:80px; text-align:right">
+                            R$ ${(item.price * item.qty).toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            totalDisplay.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function updateQty(id, change) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty += change;
+                if (item.qty <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
+            }
+            renderCartItems();
+            updateBadge();
+        }
+
+        // INTEGRAÇÃO WHATSAPP
+        function sendToWhatsApp() {
+            if (cart.length === 0) return alert("Adicione itens antes de enviar!");
+
+            const phone = "5511999999999"; // COLOQUE SEU NÚMERO AQUI (com DDD e sem espaços)
+            const payment = document.getElementById('payment-method').value;
+            let total = 0;
+
+            let message = `*NOVO PEDIDO - SHRIMP MASTER*\n`;
+            message += `--------------------------------\n\n`;
+
+            cart.forEach(item => {
+                const sub = item.price * item.qty;
+                total += sub;
+                message += `✅ *${item.qty}x ${item.name}*\n`;
+                message += `     Subtotal: R$ ${sub.toFixed(2)}\n\n`;
+            });
+
+            message += `--------------------------------\n`;
+            message += `*Total: R$ ${total.toFixed(2)}*\n`;
+            message += `*Pagamento:* ${payment}\n\n`;
+            message += `_Por favor, confirme a disponibilidade e o prazo de entrega._`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Iniciar
+        renderProducts();
+    </script>
+</body>
+</html>
