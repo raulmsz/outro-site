@@ -3,257 +3,465 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haras Elite | Leilão e Venda de Cavalos de Raça</title>
+    <title>Haras Elite | Venda de Cavalos de Raça</title>
+    <!-- Fontes de Luxo -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #c5a059;
-            --dark-green: #1a2f23;
-            --brown: #4e342e;
-            --beige: #f5f5f0;
-            --white: #ffffff;
-            --text: #333;
+            --ouro: #c5a059;
+            --verde-haras: #1a2f23;
+            --marrom-couro: #4e342e;
+            --bege-claro: #f5f5f0;
+            --branco: #ffffff;
+            --texto: #333;
+            --sucesso: #25d366;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--beige); color: var(--text); overflow-x: hidden; }
+        
+        body { background-color: var(--bege-claro); color: var(--texto); }
 
-        /* HEADER & HERO */
+        /* HEADER */
         header {
-            background: var(--dark-green);
-            color: var(--white);
-            padding: 1rem 5%;
+            background: var(--verde-haras);
+            color: var(--branco);
+            padding: 1.5rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        .logo h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; }
+        .logo h1 { 
+            font-family: 'Playfair Display', serif; 
+            color: var(--ouro); 
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+        }
 
         .nav-tools { display: flex; gap: 20px; align-items: center; }
 
-        .search-bar {
-            padding: 8px 15px;
-            border-radius: 20px;
-            border: none;
-            outline: none;
-            width: 250px;
-        }
-
-        .cart-trigger {
-            background: var(--gold);
-            color: var(--dark-green);
+        .search-box {
             padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            border: none;
+            border-radius: 25px;
+            border: 1px solid var(--ouro);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            outline: none;
+            width: 300px;
             transition: 0.3s;
         }
 
-        /* FILTROS */
-        .filters-container {
-            background: var(--white);
-            padding: 20px 5%;
+        .search-box:focus { background: rgba(255,255,255,0.2); width: 350px; }
+
+        .btn-carrinho {
+            background: var(--ouro);
+            color: var(--verde-haras);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            border: none;
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
             align-items: center;
-            border-bottom: 2px solid var(--gold);
+            gap: 8px;
         }
 
-        .filter-group { display: flex; flex-direction: column; }
-        select { padding: 8px; border-radius: 5px; border: 1px solid #ccc; background: white; min-width: 150px; }
+        /* FILTROS */
+        .filtros {
+            background: var(--branco);
+            padding: 20px 5%;
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            border-bottom: 2px solid var(--ouro);
+            flex-wrap: wrap;
+        }
 
-        /* GRID DE CAVALOS */
-        .catalog { padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        .campo-filtro { display: flex; flex-direction: column; gap: 5px; }
+        .campo-filtro label { font-size: 0.8rem; font-weight: 600; color: var(--marrom-couro); }
+        select { padding: 10px; border-radius: 5px; border: 1px solid #ddd; min-width: 180px; cursor: pointer; }
 
-        .horse-card {
-            background: var(--white);
+        /* CATALOGO */
+        .catalogo {
+            padding: 40px 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-cavalo {
+            background: var(--branco);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             transition: 0.4s;
             position: relative;
         }
 
-        .horse-card:hover { transform: translateY(-10px); }
+        .card-cavalo:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
 
-        .horse-img { width: 100%; height: 250px; object-fit: cover; }
-
-        .horse-badge {
+        .img-container { position: relative; height: 260px; }
+        .img-cavalo { width: 100%; height: 100%; object-fit: cover; }
+        
+        .tag-sexo {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: var(--gold);
+            background: var(--ouro);
             color: white;
             padding: 5px 15px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
+            text-transform: uppercase;
         }
 
-        .horse-info { padding: 20px; }
-        .horse-info h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 5px; }
-        .horse-spec { font-size: 0.85rem; color: #666; margin-bottom: 15px; }
-        
-        .price-tag { font-size: 1.5rem; font-weight: 700; color: var(--brown); margin-bottom: 15px; }
+        .info-cavalo { padding: 25px; }
+        .info-cavalo h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--verde-haras); }
+        .detalhes-rapidos { font-size: 0.85rem; color: #666; margin-bottom: 15px; line-height: 1.6; }
+        .preco { font-size: 1.6rem; font-weight: 700; color: var(--marrom-couro); margin-bottom: 20px; }
 
-        .btn-group { display: flex; gap: 10px; }
-        .btn-details { flex: 1; background: #eee; border: none; padding: 10px; cursor: pointer; border-radius: 5px; }
-        .btn-buy { flex: 2; background: var(--dark-green); color: white; border: none; padding: 10px; cursor: pointer; border-radius: 5px; font-weight: 600; }
-        .btn-buy:hover { background: var(--brown); }
+        .acoes { display: flex; gap: 10px; }
+        .btn-ver { flex: 1; padding: 12px; border: 1px solid var(--ouro); background: none; cursor: pointer; border-radius: 5px; font-weight: 600; transition: 0.3s; }
+        .btn-ver:hover { background: var(--bege-claro); }
+        .btn-interesse { flex: 2; padding: 12px; background: var(--verde-haras); color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: 600; transition: 0.3s; }
+        .btn-interesse:hover { background: var(--marrom-couro); }
 
-        /* MODAL DETALHES */
+        /* MODAL DE DETALHES */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             display: none;
             justify-content: center; align-items: center;
             z-index: 2000;
+            padding: 20px;
         }
 
         .modal-content {
-            background: white; width: 90%; max-width: 900px; max-height: 90vh;
+            background: white; width: 100%; max-width: 1000px; max-height: 90vh;
             border-radius: 20px; display: flex; overflow: hidden; position: relative;
+            animation: slideUp 0.4s ease;
         }
 
-        .modal-img { width: 50%; object-fit: cover; }
-        .modal-body { width: 50%; padding: 40px; overflow-y: auto; }
-        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; border: none; background: none; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* CARRINHO LATERIAL */
-        .cart-panel {
+        .modal-img { width: 50%; object-fit: cover; }
+        .modal-info { width: 50%; padding: 40px; overflow-y: auto; }
+        .fechar-modal { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; cursor: pointer; border: none; background: none; color: #999; }
+
+        /* CARRINHO LATERAL */
+        .carrinho-sidebar {
             position: fixed;
-            top: 0; right: -400px; width: 400px; height: 100%;
-            background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.2);
-            transition: 0.4s; z-index: 1500;
+            top: 0; right: -450px; width: 450px; height: 100%;
+            background: white; box-shadow: -5px 0 30px rgba(0,0,0,0.2);
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1500;
             display: flex; flex-direction: column;
         }
 
-        .cart-panel.active { right: 0; }
+        .carrinho-sidebar.ativo { right: 0; }
 
-        .cart-header { padding: 20px; background: var(--dark-green); color: white; display: flex; justify-content: space-between; }
-        .cart-items { flex: 1; overflow-y: auto; padding: 20px; }
-        .cart-item { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .cart-item img { width: 60px; height: 60px; border-radius: 5px; object-fit: cover; }
+        .carrinho-topo { padding: 25px; background: var(--verde-haras); color: white; display: flex; justify-content: space-between; align-items: center; }
+        .lista-interesse { flex: 1; overflow-y: auto; padding: 25px; }
+        .item-carrinho { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .item-carrinho img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; }
 
-        .cart-footer { padding: 20px; background: #f9f9f9; }
-        .total-row { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; }
+        .carrinho-rodape { padding: 25px; background: #f9f9f9; border-top: 1px solid #ddd; }
+        .total-container { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; color: var(--verde-haras); }
 
         .btn-whatsapp {
-            width: 100%; background: #25d366; color: white; border: none; padding: 15px;
-            border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
+            width: 100%; background: var(--sucesso); color: white; border: none; padding: 18px;
+            border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; 
+            display: flex; justify-content: center; align-items: center; gap: 12px;
+            transition: 0.3s;
         }
+        .btn-whatsapp:hover { filter: brightness(1.1); transform: scale(1.02); }
 
-        @media (max-width: 768px) {
+        /* RESPONSIVIDADE */
+        @media (max-width: 900px) {
             .modal-content { flex-direction: column; }
-            .modal-img, .modal-body { width: 100%; }
-            .modal-img { height: 250px; }
-            .cart-panel { width: 100%; right: -100%; }
+            .modal-img, .modal-info { width: 100%; }
+            .modal-img { height: 300px; }
+            .carrinho-sidebar { width: 100%; }
+            .search-box { width: 150px; }
+            .search-box:focus { width: 180px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo"><h1>HARAS ELITE</h1></div>
+        <div class="logo">
+            <h1>HARAS ELITE</h1>
+        </div>
         <div class="nav-tools">
-            <input type="text" class="search-bar" placeholder="Buscar raça ou nome..." onkeyup="searchHorse(this.value)">
-            <button class="cart-trigger" onclick="toggleCart(true)">
-                📋 Intenção de Compra (<span id="cart-count">0</span>)
+            <input type="text" class="search-box" id="busca" placeholder="Buscar por nome ou raça..." onkeyup="buscarCavalos(this.value)">
+            <button class="btn-carrinho" onclick="toggleCarrinho(true)">
+                🐴 LISTA (<span id="contagem-carrinho">0</span>)
             </button>
         </div>
     </header>
 
-    <!-- Filtros Avançados -->
-    <section class="filters-container">
-        <div class="filter-group">
-            <label>Raça</label>
-            <select id="filter-breed" onchange="applyFilters()">
-                <option value="all">Todas as Raças</option>
+    <!-- Filtros Inteligentes -->
+    <section class="filtros">
+        <div class="campo-filtro">
+            <label>FILTRAR POR RAÇA</label>
+            <select id="filtro-raca" onchange="aplicarFiltros()">
+                <option value="todos">Todas as Raças</option>
                 <option value="Quarto de Milha">Quarto de Milha</option>
                 <option value="Mangalarga">Mangalarga Marchador</option>
                 <option value="Árabe">Puro Sangue Árabe</option>
                 <option value="Frísio">Frísio (Friesian)</option>
+                <option value="Appaloosa">Appaloosa</option>
             </select>
         </div>
-        <div class="filter-group">
-            <label>Sexo</label>
-            <select id="filter-sex" onchange="applyFilters()">
-                <option value="all">Todos</option>
+        <div class="campo-filtro">
+            <label>CATEGORIA</label>
+            <select id="filtro-sexo" onchange="aplicarFiltros()">
+                <option value="todos">Todos os Sexos</option>
                 <option value="Garanhão">Garanhão</option>
                 <option value="Égua">Égua</option>
-                <option value="Potro">Potro/Potra</option>
+                <option value="Potro">Potro / Potra</option>
             </select>
         </div>
-        <div class="filter-group">
-            <label>Ordem</label>
-            <select id="filter-order" onchange="applyFilters()">
-                <option value="new">Mais recentes</option>
-                <option value="low">Menor Preço</option>
-                <option value="high">Maior Preço</option>
+        <div class="campo-filtro">
+            <label>ORDENAR</label>
+            <select id="filtro-preco" onchange="aplicarFiltros()">
+                <option value="relevancia">Relevância</option>
+                <option value="menor">Menor Valor</option>
+                <option value="maior">Maior Valor</option>
             </select>
         </div>
     </section>
 
-    <!-- Catálogo -->
-    <main class="catalog" id="horse-catalog">
-        <!-- JS injeta aqui -->
+    <!-- Grade de Produtos -->
+    <main class="catalogo" id="grade-cavalos">
+        <!-- Injetado via JavaScript -->
     </main>
 
-    <!-- Modal de Detalhes -->
-    <div class="modal" id="details-modal">
+    <!-- Modal Detalhes do Animal -->
+    <div class="modal" id="modal-detalhes">
         <div class="modal-content">
-            <button class="close-modal" onclick="closeModal()">&times;</button>
-            <img src="" class="modal-img" id="modal-img">
-            <div class="modal-body">
-                <h2 id="modal-name" style="font-family: 'Playfair Display'; font-size: 2rem;"></h2>
-                <p id="modal-breed" style="color: var(--gold); font-weight: 600;"></p>
-                <hr style="margin: 20px 0;">
-                <div id="modal-specs">
-                    <!-- Especificações técnicas -->
+            <button class="fechar-modal" onclick="fecharModal()">&times;</button>
+            <img src="" class="modal-img" id="m-img">
+            <div class="modal-info">
+                <h2 id="m-nome" style="font-family: 'Playfair Display'; font-size: 2.2rem; color: var(--verde-haras);"></h2>
+                <p id="m-raca" style="color: var(--ouro); font-weight: 600; font-size: 1.1rem; margin-bottom: 20px;"></p>
+                
+                <div style="background: #f8f8f8; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
+                    <h4 style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">FICHA TÉCNICA</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
+                        <p><b>Idade:</b> <span id="m-idade"></span></p>
+                        <p><b>Pelagem:</b> <span id="m-cor"></span></p>
+                        <p><b>Sexo:</b> <span id="m-sexo"></span></p>
+                        <p><b>Registro:</b> Sim (Ativo)</p>
+                    </div>
                 </div>
-                <div class="price-tag" id="modal-price" style="margin-top:20px"></div>
-                <p id="modal-desc" style="line-height: 1.6; color: #555; margin-bottom: 20px;"></p>
-                <button class="btn-buy" id="modal-add-btn" style="width: 100%; padding: 15px;">ADICIONAR À LISTA DE INTERESSE</button>
+
+                <p id="m-desc" style="line-height: 1.6; color: #555; margin-bottom: 25px;"></p>
+                
+                <div class="preco" id="m-preco"></div>
+                
+                <button class="btn-interesse" id="m-btn-add" style="width: 100%; padding: 18px; font-size: 1.1rem;">ADICIONAR À LISTA DE INTERESSE</button>
             </div>
         </div>
     </div>
 
-    <!-- Carrinho Lateral -->
-    <div class="cart-panel" id="cart-panel">
-        <div class="cart-header">
-            <h3>Lista de Interesse</h3>
-            <button onclick="toggleCart(false)" style="background:none; border:none; color:white; cursor:pointer; font-size:1.5rem">&times;</button>
+    <!-- Carrinho Sidebar -->
+    <div class="carrinho-sidebar" id="sidebar">
+        <div class="carrinho-topo">
+            <h3>Animais Selecionados</h3>
+            <button onclick="toggleCarrinho(false)" style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer">&times;</button>
         </div>
-        <div class="cart-items" id="cart-items">
-            <!-- Itens do carrinho -->
+        <div class="lista-interesse" id="itens-carrinho">
+            <!-- Itens via JS -->
         </div>
-        <div class="cart-footer">
-            <div class="total-row">
-                <span>Valor Total Estimado:</span>
-                <span id="cart-total">R$ 0,00</span>
+        <div class="carrinho-rodape">
+            <div class="total-container">
+                <span>Total Estimado:</span>
+                <span id="total-valor">R$ 0,00</span>
             </div>
-            <div style="margin-bottom: 15px;">
-                <label><b>Forma de Pagamento Preferencial:</b></label>
-                <select id="payment-choice" style="width: 100%; margin-top:5px">
-                    <option>À Vista (10% desconto)</option>
-                    <option>Parcelamento em 36x (Plano Haras)</option>
-                    <option>Troca / Permuta</option>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 0.8rem; font-weight: 700;">PLANO DE PAGAMENTO:</label>
+                <select id="plano-pagamento" style="width: 100%; margin-top: 5px;">
+                    <option>À Vista (10% de desconto)</option>
+                    <option>Entrada + 24 Parcelas</option>
+                    <option>Plano Safra / Semestral</option>
                 </select>
             </div>
-            <button class="btn-whatsapp" onclick="sendWhatsApp()">
-                ENVIAR PROPOSTA VIA WHATSAPP
+            <button class="btn-whatsapp" onclick="finalizarWhatsApp()">
+                SOLICITAR NEGOCIAÇÃO VIA WHATSAPP
             </button>
         </div>
     </div>
 
     <script>
-        const horses = [
-            { id: 1, name: "Apollo Del Rancho", br
+        // Banco de Dados de Animais
+        const cavalos = [
+            { id: 1, nome: "Eclipse do Ouro", raca: "Quarto de Milha", sexo: "Garanhão", idade: "5 anos", cor: "Alazão", preco: 95000, img: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=800", desc: "Animal de performance superior em provas de Laço. Linhagem direta de grandes campeões mundiais. Temperamento impecável e estrutura óssea robusta." },
+            { id: 2, nome: "Soberana da Marcha", raca: "Mangalarga", sexo: "Égua", idade: "4 anos", cor: "Pampa de Preto", preco: 58000, img: "https://images.unsplash.com/photo-1598974357851-98166a9f9b45?w=800", desc: "Marcha picada legítima, extremamente macia. Ideal para cavalgadas de luxo e reprodução. Já premiada em exposições regionais." },
+            { id: 3, nome: "Sheik Al Arab", raca: "Árabe", sexo: "Garanhão", idade: "6 anos", cor: "Tordilho", preco: 150000, img: "https://images.unsplash.com/photo-1534073738927-3dfb282a103f?w=800", desc: "Refinamento e elegância extrema. Linhagem egípcia pura. Indicado para proprietários exigentes que buscam um animal de show ou enduro de alta performance." },
+            { id: 4, nome: "Black Night", raca: "Frísio", sexo: "Garanhão", idade: "7 anos", cor: "Preto", preco: 280000, img: "https://images.unsplash.com/photo-1601989391030-584747065979?w=800", desc: "Importado da Holanda com pedigree completo. Movimentação clássica e crinas abundantes. O ápice do luxo equestre." },
+            { id: 5, nome: "Princesa Appaloosa", raca: "Appaloosa", sexo: "Potra", idade: "18 meses", cor: "Leopardo", preco: 35000, img: "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?w=800", desc: "Potra com pelagem exótica muito procurada. Genética de trabalho e conformação. Futura doadora de embriões." },
+            { id: 6, nome: "Zafira Star", raca: "Quarto de Milha", sexo: "Égua", idade: "5 anos", cor: "Baio Amarilho", preco: 82000, img: "https://images.unsplash.com/photo-1551884831-bbf3cdc6469e?w=800", desc: "Especialista em Apartação. Animal muito ágil e dócil. Registro na ABQM em dia." },
+            { id: 7, nome: "Thor da Marcha", raca: "Mangalarga", sexo: "Potro", idade: "24 meses", cor: "Castanho", preco: 22000, img: "https://images.unsplash.com/photo-1518467166778-b88f373ffec7?w=800", desc: "Potro iniciado no casqueamento e doma racional. Excelente futuro para provas de marcha batida." }
+        ];
+
+        let listaInteresse = [];
+
+        // Renderizar Catálogo
+        function renderizar(dados = cavalos) {
+            const grade = document.getElementById('grade-cavalos');
+            grade.innerHTML = dados.map(c => `
+                <div class="card-cavalo">
+                    <div class="img-container">
+                        <span class="tag-sexo">${c.sexo}</span>
+                        <img src="${c.img}" class="img-cavalo" alt="${c.nome}">
+                    </div>
+                    <div class="info-cavalo">
+                        <h3>${c.nome}</h3>
+                        <p class="detalhes-rapidos"><b>${c.raca}</b> • ${c.idade}<br>Pelagem: ${c.cor}</p>
+                        <div class="preco">R$ ${c.preco.toLocaleString('pt-BR')}</div>
+                        <div class="acoes">
+                            <button class="btn-ver" onclick="verDetalhes(${c.id})">Ver Ficha</button>
+                            <button class="btn-interesse" onclick="adicionarCarrinho(${c.id})">Interesse</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Busca e Filtros
+        function aplicarFiltros() {
+            const raca = document.getElementById('filtro-raca').value;
+            const sexo = document.getElementById('filtro-sexo').value;
+            const precoOrdem = document.getElementById('filtro-preco').value;
+
+            let filtrados = cavalos.filter(c => 
+                (raca === 'todos' || c.raca === raca) &&
+                (sexo === 'todos' || c.sexo === sexo)
+            );
+
+            if (precoOrdem === 'menor') filtrados.sort((a, b) => a.preco - b.preco);
+            if (precoOrdem === 'maior') filtrados.sort((a, b) => b.preco - a.preco);
+
+            renderizar(filtrados);
+        }
+
+        function buscarCavalos(termo) {
+            const filtrados = cavalos.filter(c => 
+                c.nome.toLowerCase().includes(termo.toLowerCase()) || 
+                c.raca.toLowerCase().includes(termo.toLowerCase())
+            );
+            renderizar(filtrados);
+        }
+
+        // Modal
+        function verDetalhes(id) {
+            const c = cavalos.find(item => item.id === id);
+            document.getElementById('m-img').src = c.img;
+            document.getElementById('m-nome').innerText = c.nome;
+            document.getElementById('m-raca').innerText = `${c.raca} | ${c.sexo}`;
+            document.getElementById('m-idade').innerText = c.idade;
+            document.getElementById('m-cor').innerText = c.cor;
+            document.getElementById('m-sexo').innerText = c.sexo;
+            document.getElementById('m-desc').innerText = c.desc;
+            document.getElementById('m-preco').innerText = `R$ ${c.preco.toLocaleString('pt-BR')}`;
+            document.getElementById('m-btn-add').onclick = () => { adicionarCarrinho(c.id); fecharModal(); };
+            
+            document.getElementById('modal-detalhes').style.display = 'flex';
+        }
+
+        function fecharModal() { document.getElementById('modal-detalhes').style.display = 'none'; }
+
+        // Carrinho / Lista de Interesse
+        function toggleCarrinho(abrir) {
+            document.getElementById('sidebar').classList.toggle('ativo', abrir);
+        }
+
+        function adicionarCarrinho(id) {
+            const cavalo = cavalos.find(c => c.id === id);
+            if (!listaInteresse.find(item => item.id === id)) {
+                listaInteresse.push(cavalo);
+                atualizarCarrinho();
+                toggleCarrinho(true);
+            } else {
+                alert("Este animal já está em sua lista de interesse!");
+            }
+        }
+
+        function removerCarrinho(id) {
+            listaInteresse = listaInteresse.filter(c => c.id !== id);
+            atualizarCarrinho();
+        }
+
+        function atualizarCarrinho() {
+            const container = document.getElementById('itens-carrinho');
+            const totalDisplay = document.getElementById('total-valor');
+            const contagem = document.getElementById('contagem-carrinho');
+            
+            contagem.innerText = listaInteresse.length;
+            
+            if (listaInteresse.length === 0) {
+                container.innerHTML = "<p style='text-align:center; color:#999; margin-top:50px;'>Sua lista está vazia.</p>";
+                totalDisplay.innerText = "R$ 0,00";
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = listaInteresse.map(c => {
+                total += c.preco;
+                return `
+                    <div class="item-carrinho">
+                        <img src="${c.img}">
+                        <div style="flex:1">
+                            <h4 style="font-size:0.9rem">${c.nome}</h4>
+                            <p style="font-size:0.8rem; color:#666">${c.raca}</p>
+                            <p style="font-weight:700">R$ ${c.preco.toLocaleString('pt-BR')}</p>
+                        </div>
+                        <button onclick="removerCarrinho(${c.id})" style="border:none; color:red; cursor:pointer; background:none; font-size:1.2rem">&times;</button>
+                    </div>
+                `;
+            }).join('');
+
+            totalDisplay.innerText = `R$ ${total.toLocaleString('pt-BR')}`;
+        }
+
+        // WhatsApp Checkout
+        function finalizarWhatsApp() {
+            if (listaInteresse.length === 0) return alert("Sua lista está vazia!");
+
+            const fone = "5511999999999"; // Substitua pelo seu número
+            const plano = document.getElementById('plano-pagamento').value;
+            let total = 0;
+
+            let msg = `*INTERESSE EM AQUISIÇÃO - HARAS ELITE*\n`;
+            msg += `----------------------------------------\n\n`;
+
+            listaInteresse.forEach(c => {
+                msg += `🐴 *${c.nome}*\n`;
+                msg += `   Raça: ${c.raca}\n`;
+                msg += `   Valor: R$ ${c.preco.toLocaleString('pt-BR')}\n\n`;
+                total += c.preco;
+            });
+
+            msg += `----------------------------------------\n`;
+            msg += `*Valor Total:* R$ ${total.toLocaleString('pt-BR')}\n`;
+            msg += `*Pretendido:* ${plano}\n\n`;
+            msg += `_Olá, gostaria de receber mais informações e vídeos dos animais selecionados acima._`;
+
+            const url = `https://wa.me/${fone}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        }
+
+        // Inicializar
+        renderizar();
+    </script>
+</body>
+</html>
